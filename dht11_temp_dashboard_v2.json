@@ -1,5 +1,5 @@
 {  
-   "title":"DHT11: Temperature & Humidity Dashboard",
+   "title":"DHT11: Dashboard de Temperatura y Humedad",
    "configuration":{  
       "description":"Dashboard para visualizar la temperatura y humedad recibida desde el sensor DHT11",
       "widgets":[  
