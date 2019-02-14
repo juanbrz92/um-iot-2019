@@ -1,0 +1,131 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "Alarm and Send Email(Cristian)",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 5,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 783,
+          "layoutY": 53
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Create Alarm",
+        "debugMode": false,
+        "configuration": {
+          "alarmType": "Critical Latitude",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
+          "severity": "CRITICAL",
+          "propagate": true
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 488,
+          "layoutY": 243
+        },
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear Alarm",
+        "debugMode": false,
+        "configuration": {
+          "alarmType": "Critical Temperature",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 480,
+          "layoutY": 55
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Add latitude to metadata",
+        "debugMode": false,
+        "configuration": {
+          "jsScript": "metadata.latitude = msg.latitude;\nmetadata.longitude = msg.longitude;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1069,
+          "layoutY": 54
+        },
+        "type": "org.thingsboard.rule.engine.mail.TbMsgToEmailNode",
+        "name": "Alarm Email",
+        "debugMode": false,
+        "configuration": {
+          "fromTemplate": "chiapponecontactos@gmail.com",
+          "toTemplate": "chiapponecontactos@gmail.com",
+          "ccTemplate": null,
+          "bccTemplate": null,
+          "subjectTemplate": "Device ${deviceType} latitude and longitude unacceptable",
+          "bodyTemplate": "Device ${deviceName} has unacceptable latitude and longitude: ${latitude} ${longitude}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1338,
+          "layoutY": 54
+        },
+        "type": "org.thingsboard.rule.engine.mail.TbSendEmailNode",
+        "name": "SendGrid SMTP",
+        "debugMode": false,
+        "configuration": {
+          "useSystemSmtpSettings": true,
+          "smtpHost": "smtp.sendgrid.net",
+          "smtpPort": 25,
+          "username": "apikey",
+          "password": "YOUR_API_PASSWORD",
+          "smtpProtocol": "smtp",
+          "timeout": 10000,
+          "enableTls": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 284,
+          "layoutY": 152
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Out range",
+        "debugMode": false,
+        "configuration": {
+          "jsScript": "var lat1 = -32.890288;\nvar lon1 = -68.866257\nvar lat2 = msg.latitude;\nvar lon2 = msg.longitude;\nvar unit = \"K\";\n\tif ((lat1 == lat2) && (lon1 == lon2)) {\n\t\treturn false;\n\t}\n\telse {\n\t\tvar radlat1 = Math.PI * lat1/180;\n\t\tvar radlat2 = Math.PI * lat2/180;\n\t\tvar theta = lon1-lon2;\n\t\tvar radtheta = Math.PI * theta/180;\n\t\tvar dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);\n\t\tif (dist > 1) {\n\t\t\tdist = 1;\n\t\t}\n\t\tdist = Math.acos(dist);\n\t\tdist = dist * 180/Math.PI;\n\t\tdist = dist * 60 * 1.1515;\n\t\tif (unit==\"K\") { dist = dist * 1.609344 }\n\t\tif (unit==\"N\") { dist = dist * 0.8684 }\n\t\tif(dist > 0.5){\n\t\t    return true;\n\t\t}else{\n\t\t    return false;\n\t\t}\n\t}\n\n\n"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 3,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 0,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 1,
+        "type": "False"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 2,
+        "type": "True"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}

@@ -1,7 +1,7 @@
 {
   "ruleChain": {
     "additionalInfo": null,
-    "name": "Alarm and Send Email",
+    "name": "Alarm and Send Email(Juan)",
     "firstRuleNodeId": null,
     "root": false,
     "debugMode": false,
@@ -19,7 +19,7 @@
         "name": "Under Threshold",
         "debugMode": false,
         "configuration": {
-          "jsScript": "return (msg.latitude > -32 || msg.latitude > -33) && (msg.longitude > -68 || msg.longitude > -69);"
+          "jsScript": "return (msg.humidity > 55) || (msg.temperature < 10);"
         }
       },
       {
@@ -31,7 +31,7 @@
         "name": "Create Alarm",
         "debugMode": false,
         "configuration": {
-          "alarmType": "Critical Latitude",
+          "alarmType": "Critical Humidity or Temperature",
           "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
           "severity": "CRITICAL",
           "propagate": true
@@ -56,10 +56,10 @@
           "layoutY": 63
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "Add latitude to metadata",
+        "name": "Add humidity and temperature to metadata",
         "debugMode": false,
         "configuration": {
-          "jsScript": "metadata.latitude = msg.latitude;\nmetadata.longitude = msg.longitude;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+          "jsScript": "metadata.humidity = msg.humidity;\nmetadata.temperature = msg.temperature;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
         }
       },
       {
@@ -71,12 +71,12 @@
         "name": "Alarm Email",
         "debugMode": false,
         "configuration": {
-          "fromTemplate": "chiapponecontactos@gmail.com",
-          "toTemplate": "chiapponecontactos@gmail.com",
+          "fromTemplate": "juanbrz92@gmail.com",
+          "toTemplate": "juanbrz92@gmail.com",
           "ccTemplate": null,
           "bccTemplate": null,
-          "subjectTemplate": "Device ${deviceType} latitude and longitude unacceptable",
-          "bodyTemplate": "Device ${deviceName} has unacceptable latitude and longitude: ${latitude} ${longitude}"
+          "subjectTemplate": "Device ${deviceType} humidity or temperature unacceptable",
+          "bodyTemplate": "Device ${deviceName} has unacceptable humidity or temperature: ${humidity} ${temperature}"
         }
       },
       {
