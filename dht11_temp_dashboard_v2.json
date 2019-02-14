@@ -1,7 +1,7 @@
 {  
-   "title":"DHT22: Temperature & Humidity Dashboard",
+   "title":"DHT11: Temperature & Humidity Dashboard",
    "configuration":{  
-      "description":"Dashboard para visualizar la temperatura y humedad recibida desde el sensor DHT22",
+      "description":"Dashboard para visualizar la temperatura y humedad recibida desde el sensor DHT11",
       "widgets":[  
          {  
             "isSystemType":true,
@@ -280,8 +280,8 @@
       ],
       "deviceAliases":{  
          "1":{  
-            "alias":"DHT22",
-            "deviceId":"a18b6890-3091-11e9-a066-65456bb705fe"
+            "alias":"DHT11",
+            "deviceId":"39a5a1c0-3094-11e9-a066-65456bb705fe"
          }
       }
    }
