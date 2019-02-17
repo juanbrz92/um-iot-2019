@@ -24,8 +24,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 904,
-          "layoutY": 63
+          "layoutX": 1196,
+          "layoutY": 64
         },
         "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
         "name": "Create Alarm",
@@ -39,8 +39,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 617,
-          "layoutY": 222
+          "layoutX": 746,
+          "layoutY": 212
         },
         "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
         "name": "Clear Alarm",
@@ -64,8 +64,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1213,
-          "layoutY": 64
+          "layoutX": 1475,
+          "layoutY": 67
         },
         "type": "org.thingsboard.rule.engine.mail.TbMsgToEmailNode",
         "name": "Alarm Email",
@@ -81,8 +81,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1518,
-          "layoutY": 67
+          "layoutX": 1739,
+          "layoutY": 65
         },
         "type": "org.thingsboard.rule.engine.mail.TbSendEmailNode",
         "name": "SendGrid SMTP",
@@ -96,6 +96,27 @@
           "smtpProtocol": "smtp",
           "timeout": 10000,
           "enableTls": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 897,
+          "layoutY": 66
+        },
+        "type": "org.thingsboard.rule.engine.mqtt.TbMqttNode",
+        "name": "DHT11",
+        "debugMode": false,
+        "configuration": {
+          "topicPattern": "dht11sensor/DHT11",
+          "host": "test.mosquitto.org",
+          "port": 1883,
+          "connectTimeoutSec": 10,
+          "clientId": "",
+          "cleanSession": false,
+          "ssl": false,
+          "credentials": {
+            "type": "anonymous"
+          }
         }
       }
     ],
@@ -117,12 +138,17 @@
       },
       {
         "fromIndex": 3,
-        "toIndex": 1,
+        "toIndex": 6,
         "type": "Success"
       },
       {
         "fromIndex": 4,
         "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 1,
         "type": "Success"
       }
     ],
