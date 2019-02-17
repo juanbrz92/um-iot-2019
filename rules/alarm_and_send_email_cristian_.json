@@ -34,7 +34,7 @@
         "name": "Clear Alarm",
         "debugMode": false,
         "configuration": {
-          "alarmType": "Critical Temperature",
+          "alarmType": "Critical Latitude",
           "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;"
         }
       },
