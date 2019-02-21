@@ -1,0 +1,157 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "Alarm and Send Email(Juan)",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 0,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 344,
+          "layoutY": 151
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Under Threshold",
+        "debugMode": false,
+        "configuration": {
+          "jsScript": "return (msg.humidity > 55) || (msg.temperature < 10);"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1196,
+          "layoutY": 64
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Create Alarm",
+        "debugMode": false,
+        "configuration": {
+          "alarmType": "Critical Humidity or Temperature",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
+          "severity": "CRITICAL",
+          "propagate": true
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 746,
+          "layoutY": 212
+        },
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear Alarm",
+        "debugMode": false,
+        "configuration": {
+          "alarmType": "Critical Temperature",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 596,
+          "layoutY": 63
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Add humidity and temperature to metadata",
+        "debugMode": false,
+        "configuration": {
+          "jsScript": "metadata.humidity = msg.humidity;\nmetadata.temperature = msg.temperature;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1475,
+          "layoutY": 67
+        },
+        "type": "org.thingsboard.rule.engine.mail.TbMsgToEmailNode",
+        "name": "Alarm Email",
+        "debugMode": false,
+        "configuration": {
+          "fromTemplate": "juanbrz92@gmail.com",
+          "toTemplate": "juanbrz92@gmail.com",
+          "ccTemplate": null,
+          "bccTemplate": null,
+          "subjectTemplate": "Device ${deviceType} humidity or temperature unacceptable",
+          "bodyTemplate": "Device ${deviceName} has unacceptable humidity or temperature: ${humidity} ${temperature}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1739,
+          "layoutY": 65
+        },
+        "type": "org.thingsboard.rule.engine.mail.TbSendEmailNode",
+        "name": "SendGrid SMTP",
+        "debugMode": false,
+        "configuration": {
+          "useSystemSmtpSettings": true,
+          "smtpHost": "smtp.sendgrid.net",
+          "smtpPort": 25,
+          "username": "apikey",
+          "password": "YOUR_API_PASSWORD",
+          "smtpProtocol": "smtp",
+          "timeout": 10000,
+          "enableTls": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 897,
+          "layoutY": 66
+        },
+        "type": "org.thingsboard.rule.engine.mqtt.TbMqttNode",
+        "name": "DHT11",
+        "debugMode": false,
+        "configuration": {
+          "topicPattern": "dht11sensor/DHT11",
+          "host": "test.mosquitto.org",
+          "port": 1883,
+          "connectTimeoutSec": 10,
+          "clientId": "",
+          "cleanSession": false,
+          "ssl": false,
+          "credentials": {
+            "type": "anonymous"
+          }
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 2,
+        "type": "False"
+      },
+      {
+        "fromIndex": 0,
+        "toIndex": 3,
+        "type": "True"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 4,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 1,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}
