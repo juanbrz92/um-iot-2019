@@ -3,32 +3,32 @@
 		"type": "MQTT",
 		"configuration": {
 			"brokers": [{
-					"host": "test.mosquitto.org", //SERVIDOR DONDE PUBLICA NUESTRO SMARTPHONE Y AL CUAL NOS VAMOS A SUSCRIBIR
-					"port": 1883, //PUERTO MQTT
+					"host": "test.mosquitto.org",
+					"port": 1883,
 					"ssl": false,
-					"retryInterval": 6000, //FRECUENCIA EN MILISEGUNDOS CON LA QUE ACTUALIZARÁ LOS MENSAJES
+					"retryInterval": 6000,
 					"credentials": {
 						"type": "anonymous"
 					},
 					"mapping": [{
-							"topicFilter": "zanzito/cchiappone/location", //TÓPICO DONDE PUBLICA NUESTRO SMARTPHONE CON ZANZITO
+							"topicFilter": "zanzito/cchiappone/location",
 							"converter": {
 								"type": "json",
 								"filterExpression": "",
-                                "deviceNameTopicExpression": "cchiappone", //NOMBRE DEL DISPOSITIVO DONDE SE GUARDARAN LOS MENSAJES RECIBIDOS
+                                "deviceNameTopicExpression": "cchiappone",
 								"attributes": [{
 										"type": "string",
 										"key": "model",
-										"value": "motorola" //OPCIONAL: MARCAL O MODELO DEL DISPOSITIVO MÓVIL
+										"value": "motorola"
 									}
 								],
 								"timeseries": [{
-										"type": "double", //TIPO DE DATO QUE SE VA A RECIBIR
-										"key": "latitude", //NOMBRE DE LA VARIABLE DONDE SE PUBLICA LATITUD
+										"type": "double",
+										"key": "latitude",
 										"value": "${$.latitude}"
 									},{
 										"type": "double",
-										"key": "longitude", //NOMBRE DE LA VARIABLE DONDE SE PUBLICA LONGITUD
+										"key": "longitude",
 										"value": "${$.longitude}"
 									}
                                 ]
@@ -40,4 +40,3 @@
 		}
 	}
 ]
-
