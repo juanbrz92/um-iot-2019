@@ -1,2 +1,2 @@
-# um-iot-2019
+# IoT UM - 2019
 Deployment de una plataforma de IoT en KUbernetes

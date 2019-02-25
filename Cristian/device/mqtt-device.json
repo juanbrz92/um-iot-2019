@@ -1,0 +1,42 @@
+[{
+		"id": "mqtt",
+		"type": "MQTT",
+		"configuration": {
+			"brokers": [{
+					"host": "test.mosquitto.org",
+					"port": 1883,
+					"ssl": false,
+					"retryInterval": 6000,
+					"credentials": {
+						"type": "anonymous"
+					},
+					"mapping": [{
+							"topicFilter": "zanzito/cchiappone/location",
+							"converter": {
+								"type": "json",
+								"filterExpression": "",
+                                "deviceNameTopicExpression": "cchiappone",
+								"attributes": [{
+										"type": "string",
+										"key": "model",
+										"value": "motorola"
+									}
+								],
+								"timeseries": [{
+										"type": "double",
+										"key": "latitude",
+										"value": "${$.latitude}"
+									},{
+										"type": "double",
+										"key": "longitude",
+										"value": "${$.longitude}"
+									}
+                                ]
+							}
+						}
+					]					
+				}
+			]
+		}
+	}
+]
